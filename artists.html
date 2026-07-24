@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Artists | Moodify</title>
+
+<!-- Bootstrap 5 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- FontAwesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+:root {
+    --brand-green: #1DB954;
+    --brand-dark-green: #18a84b;
+    --bg-black: #0b0b0b;
+    --card-bg: #181818;
+    --card-hover: #242424;
+}
+
+body {
+    background: var(--bg-black);
+    color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Navbar */
+.navbar {
+    background: #000;
+    border-bottom: 1px solid #1c1c1c;
+}
+
+.navbar-brand {
+    color: var(--brand-green) !important;
+    font-weight: 800;
+    font-size: 26px;
+    letter-spacing: -0.5px;
+}
+
+.nav-link {
+    color: #b3b3b3 !important;
+    margin-left: 18px;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover, .nav-link.active {
+    color: #ffffff !important;
+}
+
+/* Header */
+.header {
+    padding: 60px 0 30px;
+    text-align: center;
+    background: radial-gradient(circle at top, rgba(29, 185, 84, 0.15) 0%, transparent 70%);
+}
+
+.header h1 {
+    font-size: 48px;
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+.header p {
+    color: #a7a7a7;
+    font-size: 1.1rem;
+}
+
+/* Search & Filter Controls */
+.search-box {
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.search-box input {
+    background: #242424;
+    border: 1px solid #333;
+    color: #fff;
+    border-radius: 50px;
+    padding: 14px 20px 14px 50px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.search-box input:focus {
+    background: #2a2a2a;
+    border-color: var(--brand-green);
+    color: #fff;
+    box-shadow: 0 0 15px rgba(29, 185, 84, 0.25);
+}
+
+.search-box input::placeholder {
+    color: #888;
+}
+
+.search-icon {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+    font-size: 1.1rem;
+}
+
+/* Genre Pills */
+.genre-pills {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.pill-btn {
+    background: #222;
+    color: #ccc;
+    border: 1px solid #333;
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.pill-btn:hover, .pill-btn.active {
+    background: var(--brand-green);
+    color: #000;
+    font-weight: 700;
+    border-color: var(--brand-green);
+}
+
+/* Artist Cards */
+.artist-card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+    border: 1px solid #222;
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.artist-card:hover {
+    background: var(--card-hover);
+    transform: translateY(-8px);
+    border-color: rgba(29, 185, 84, 0.4);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(29, 185, 84, 0.2);
+}
+
+.img-container {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 16px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    border: 3px solid #282828;
+    transition: transform 0.3s ease;
+}
+
+.artist-card:hover .img-container {
+    transform: scale(1.05);
+    border-color: var(--brand-green);
+}
+
+.img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.artist-card h4 {
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-bottom: 4px;
+}
+
+.famous-for {
+    font-size: 0.82rem;
+    color: #b3b3b3;
+    min-height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.genre-badge {
+    background: rgba(29, 185, 84, 0.15);
+    color: var(--brand-green);
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 12px;
+    display: inline-block;
+    margin-bottom: 8px;
+}
+
+.followers {
+    color: #888;
+    font-size: 0.85rem;
+    margin-bottom: 14px;
+}
+
+/* Song Dropdown List */
+.song-list {
+    background: #121212;
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 10px;
+    text-align: left;
+    font-size: 0.85rem;
+    border: 1px solid #2a2a2a;
+}
+
+.song-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+    border-bottom: 1px solid #222;
+}
+
+.song-item:last-child {
+    border-bottom: none;
+}
+
+.song-item i {
+    color: var(--brand-green);
+    cursor: pointer;
+}
+
+.btn-green {
+    background: var(--brand-green);
+    color: #000;
+    font-weight: 700;
+    border-radius: 30px;
+    padding: 8px 0;
+    border: none;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.btn-green:hover {
+    background: #1fdf64;
+    color: #000;
+    transform: scale(1.02);
+}
+
+footer {
+    background: #000;
+    text-align: center;
+    padding: 25px;
+    margin-top: 80px;
+    color: #777;
+    border-top: 1px solid #1c1c1c;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg sticky-top">
+  <div class="container">
+    <a class="navbar-brand" href="index.html">
+      <i class="fa-brands fa-spotify me-2"></i>Moodify
+    </a>
+    <button class="navbar-toggler navbar-dark" data-bs-toggle="collapse" data-bs-target="#menu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="menu">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="dashboard.html">Discover</a></li>
+        <li class="nav-item"><a class="nav-link active" href="artists.html">Artists</a></li>
+        <li class="nav-item"><a class="nav-link" href="playlist.html">Playlists</a></li>
+        <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+        <li class="nav-item"><a class="nav-link" href="wrapped.html">Moodify Wrapped</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Heading -->
+<div class="header">
+  <div class="container">
+    <h1>Featured Artists 🎤</h1>
+    <p>Explore global icons & stream their signature tracks across every genre.</p>
+  </div>
+</div>
+
+<!-- Search & Filters -->
+<div class="container mb-5">
+  <div class="search-box mb-4">
+    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+    <input type="text" id="searchInput" class="form-control" placeholder="Search by artist, genre, or track...">
+  </div>
+
+  <!-- Quick Category Pills -->
+  <div class="genre-pills">
+    <button class="pill-btn active" onclick="filterGenre('all')">All</button>
+    <button class="pill-btn" onclick="filterGenre('Pop')">Pop</button>
+    <button class="pill-btn" onclick="filterGenre('R&B')">R&B</button>
+    <button class="pill-btn" onclick="filterGenre('Hip-Hop')">Hip-Hop</button>
+    <button class="pill-btn" onclick="filterGenre('Latin Pop')">Latin Pop</button>
+    <button class="pill-btn" onclick="filterGenre('Bollywood')">Bollywood</button>
+    <button class="pill-btn" onclick="filterGenre('Punjabi')">Punjabi</button>
+    <button class="pill-btn" onclick="filterGenre('K-Pop')">K-Pop</button>
+  </div>
+</div>
+
+<!-- Artists Grid -->
+<div class="container">
+  <div class="row g-4" id="artistGrid">
+
+    <!-- The Weeknd -->
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3 artist-item" data-name="the weeknd abel tesfaye" data-genre="r&b pop">
+      <div class="artist-card">
+        <div>
+          <div class="img-container">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVE_oQVYAyp2pVZkN2b9_NU5O3lA0-GmCjHv5hhC-NNQ&s=10" alt="The Weeknd">
+          </div>
+          <h4>The Weeknd</h4>
+          <span class="badge bg-warning text-dark mb-2">Streaming Titan</span><br>
+          <span class="genre-badge">R&B / Synth-Pop</span>
+          <p class="famous-for"><i class="fa-solid fa-star me-1 text-warning"></i> Famous for cinematic dark R&B, synth-wave, and record-breaking pop anthems.</p>
+          <p class="followers"><i class="fa-solid fa-users me-1"></i> 115M Followers</p>
+        </div>
+        <button class="btn btn-green w-100" type="button" data-bs-toggle="collapse" data-bs-target="#songsWeeknd">
+          Top Songs <i class="fa-solid fa-chevron-down ms-1"></i>
+        </button>
+        <div class="collapse song-list mt-2" id="songsWeeknd">
+          <div class="song-item"><span>1. Blinding Lights</span> <i class="fa-solid fa-circle-play"></i></div>
+          <div class="song-item"><span>2. Starboy</span> <i class="fa-solid fa-circle-play"></i></div>
+          <div class="song-item"><span>3. Save Your Tears</span> <i class="fa-solid fa-circle-play"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shakira -->
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3 artist-item" data-name="shakira" data-genre="latin pop">
+      <div class="artist-card">
+        <div>
+          <div class="img-container">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcReiATaudcQJtG-BbeOYta0p3s_S-nP12W00s74UsGk1vHiY8zidkSqUORh&s=10" alt="Shakira">
+          </div>
+          <h4>Shakira</h4>
+          <span class="badge bg-danger mb-2">Queen of Latin Pop</span><br>
+          <span class="genre-badge">Latin Pop</span>
+          <p class="famous-for"><i class="fa-solid fa-star me-1 text-warning"></i> Famous for electric dance rhythms, belly dancing, and World Cup anthems.</p>
+          <p class="followers"><i class="fa-solid fa-users me-1"></i> 82M Followers</p>
+        </div>
+        <button class="btn btn-green w-100" type="button" data-bs-toggle="collapse" data-bs-target="#songsShakira">
+          Top Songs <i class="fa-solid fa-chevron-down ms-1"></i>
+        </button>
+        <div class="collapse song-list mt-2" id="songsShakira">
+          <div class="song-item"><span>1. Hips Don't Lie</span> <i class="fa-solid fa-circle-play"></i></div>
+          <div class="song-item"><span>2. Waka Waka</span> <i class="fa-solid fa-circle-play"></i></div>
+          <div class="song-item"><span>3. Whenever, Wherever</span> <i class="fa-solid fa-circle-play"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ed Sheeran -->
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3 artist-item" data-name="ed sheeran" data-genre="pop">
+      <div class="artist-card">
+        <div>
+          <div class="img-container">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFKPIPb9kIfoVCw-l9fY2CS6S-iy_9MrzQkv9o_FgjJQ&s=10" alt="Ed Sheeran">
+          </div>
+          <h4>Ed Sheeran</h4>
+          <span class="badge bg-success mb-2">Acoustic Legend</span><br>
+          <span class="genre-badge">Pop / Folk</span>
+          <p class="famous-for"><i class="fa-solid fa-star me-1 text-warning"></i> Famous for loop-pedal acoustic performances & romantic ballads.</p>
+          <p class="followers"><i class="fa-solid fa-users me-1"></i> 112M Followers</p>
+        </div>
+        <button class="btn btn-green w-100" type="button" data-bs-toggle="collapse" data-bs-target="#songsEd">
+          Top Songs <i class="fa-solid fa-chevron-down ms-1"></i>
+        </button>
+        <div class="collapse song-list mt-2" id="songsEd">
+          <div class="song-item"><span>1. Shape of You</span> <i class="fa-solid fa-circle-play"></i></div>
+          <div class="song-item"><span>2. Perfect</span> <i class="fa-solid fa-circle-play"></i></div>
+          <div class="song-item"><span>3. Thinking Out Loud</span> <i class="fa-solid fa-circle-play"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rihanna -->
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3 artist-item" data-name="rihanna riri" data-genre="r&b pop">
+      <div class="artist-card">
+        <div>
+          <div class="img-container">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVyFCaDfHTl-_MZj9GYjcd8IeONS-AqouY0aoRNb7Wyrr_82qakt12Symc&s=10" alt="Rihanna">
+          </div>
+          <h4>Rihanna</h4>
+          <span class="badge bg-info text-dark mb-2">Global Icon</span><br>
+          <span class="genre-badge">R&B / Pop</span>
+          <p class="famous-for"><i class="fa-solid fa-star me-1 text-warning"></i> Famous for chart-topping vocal hits, fashion dominance, & Super Bowl shows.</p>
+          <p class="followers"><i class="fa-solid fa-users me-1"></i> 92M Followers</p>
+        </div>
+        <button class="btn btn-green w-100" type="button" data-bs-toggle="collapse" data-bs-target="#songsRihanna">
+          Top Songs <i class="fa-solid fa-chevron-down ms-1"></i>
+        </button>
+        <div class="collapse song-list mt-2" id="songsRihanna">
+          <div class="song-item"><span>1. Diamonds</span> <i class="fa-solid fa-circle-play"></i></div>
+          <div class="song-item"><span>2. Umbrella</span> <i class="fa-solid fa-circle-play"></i></div>
+          <div class="song-item"><span>3. Work</span> <i class="fa-solid fa-circle-play"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Drake -->
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3 artist-item" data-name="drake champagnepapi" data-genre="hip-hop r&b">
+      <div class="artist-card">
+        <div>
+          <div class="img-container">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRgF7tSpdEXpBly64KuUKQcQHU2wPiAB1SeeWv-8EfyYzpgDcEju8s083M&s=10" alt="Drake">
+          </div>
+          <h4>Drake</h4>
+          <span class="badge bg-primary mb-2">Hip-Hop Giant</span><br>
+          <span class="genre-badge">Hip-Hop</span>
+          <p class="famous-for"><i class="fa-solid fa-star me-1 text-warning"></i> Famous for melodic rap hooks, versatile flows, & Billboard supremacy.</p>
+          <p class="followers"><i class="fa-solid fa-users me-1"></i> 88M Followers</p>
+        </div>
+        <button class="btn btn-green w-100" type="button" data-bs-toggle="collapse" data-bs-target="#songsDrake">
+          Top Songs <i class="fa-solid fa-chevron-down ms-1"></i>
+        </button>
+        <div class="collapse song-list mt-2" id="songsDrake">
+          <div class="song-item"><span>1. God's Plan</span> <i class="fa-solid fa-circle-play"></i></div>
+          <div class="song-item"><span>2. Hotline Bling</span> <i class="fa-solid fa-circle-play"></i></div>
+          <div class="song-item"><span>3. One Dance</span> <i class="fa-solid fa-circle-play"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Arijit Singh -->
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3 artist-item" data-name="arijit singh" data-genre="bollywood">
+      <div class="artist-card">
+        <div>
+          <div class="img-container">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwoKGLall3QkLVvyKYae_Gy903JC0tNen1JYUCFHLIsg&s=10" alt="Arijit Singh">
+          </div>
+          <h4>Arijit Singh</h4>
+          <span class="badge bg-warning text-dark mb-2">King of Melodies</span><br>
+          <span class="genre-badge">Bollywood</span>
+          <p class="famous-for"><i class="fa-solid fa-star me-1 text-warning"></i> Famous for soulful romantic anthems & emotional vocal range.</p>
+          <p class="followers"><i class="fa-solid fa-users me-1"></i> 118M Followers</p>
+        </div>
+        <button class="btn btn-green w-100" type="button" data-bs-toggle="collapse" data-bs-target="#songsArijit">
+          Top Songs <i class="fa-solid fa-chevron-down ms-1"></i>
+        </button>
+        <div class="collapse song-list mt-2" id="songsArijit">
+          <div class="song-item"><span>1. Tum Hi Ho</span> <i class="fa-solid fa-circle-play"></i></div>
+          <div class="song-item"><span>2. Channa Mereya</span> <i class="fa-solid fa-circle-play"></i></div>
+          <div class="song-item"><span>3. Kesariya</span> <i class="fa-solid fa-circle-play"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BTS -->
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3 artist-item" data-name="bts bangtan" data-genre="k-pop">
+      <div class="artist-card">
+        <div>
+          <div class="img-container">
+            <img src="https://images.indianexpress.com/2024/05/BTS-edited.jpg" alt="BTS">
+          </div>
+          <h4>BTS</h4>
+          <span class="badge bg-danger mb-2">Global Phenomenon</span><br>
+          <span class="genre-badge">K-Pop</span>
+          <p class="famous-for"><i class="fa-solid fa-star me-1 text-warning"></i> Famous for high-energy choreography & world-dominating pop hits.</p>
+          <p class="followers"><i class="fa-solid fa-users me-1"></i> 76M Followers</p>
+        </div>
+        <button class="btn btn-green w-100" type="button" data-bs-toggle="collapse" data-bs-target="#songsBTS">
+          Top Songs <i class="fa-solid fa-chevron-down ms-1"></i>
+        </button>
+        <div class="collapse song-list mt-2" id="songsBTS">
+          <div class="song-item"><span>1. Dynamite</span> <i class="fa-solid fa-circle-play"></i></div>
+          <div class="song-item"><span>2. Butter</span> <i class="fa-solid fa-circle-play"></i></div>
+          <div class="song-item"><span>3. Boy With Luv</span> <i class="fa-solid fa-circle-play"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Diljit Dosanjh -->
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3 artist-item" data-name="diljit dosanjh" data-genre="punjabi">
+      <div class="artist-card">
+        <div>
+          <div class="img-container">
+            <img src="https://s1.ticketm.net/dam/a/cf8/2f428985-6fa0-4a27-9a65-a0f86a19ecf8_RETINA_PORTRAIT_3_2.jpg" alt="Diljit Dosanjh">
+          </div>
+          <h4>Diljit Dosanjh</h4>
+          <span class="badge bg-success mb-2">Trending</span><br>
+          <span class="genre-badge">Punjabi</span>
+          <p class="famous-for"><i class="fa-solid fa-star me-1 text-warning"></i> Famous for Punjabi pop-fusion & historic stadium tours.</p>
+          <p class="followers"><i class="fa-solid fa-users me-1"></i> 24M Followers</p>
+        </div>
+        <button class="btn btn-green w-100" type="button" data-bs-toggle="collapse" data-bs-target="#songsDiljit">
+          Top Songs <i class="fa-solid fa-chevron-down ms-1"></i>
+        </button>
+        <div class="collapse song-list mt-2" id="songsDiljit">
+          <div class="song-item"><span>1. Lover</span> <i class="fa-solid fa-circle-play"></i></div>
+          <div class="song-item"><span>2. GOAT</span> <i class="fa-solid fa-circle-play"></i></div>
+          <div class="song-item"><span>3. Born to Shine</span> <i class="fa-solid fa-circle-play"></i></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Empty Search Feedback -->
+  <div id="noResults" class="text-center my-5 d-none">
+    <i class="fa-regular fa-face-frown fa-3x text-secondary mb-3"></i>
+    <h4 class="text-secondary">No artists match your search.</h4>
+  </div>
+</div>
+
+<footer>
+  <p>© 2026 Moodify | Built for Music Lovers 🎵</p>
+</footer>
+
+<!-- JS Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+const searchInput = document.getElementById('searchInput');
+const artistItems = document.querySelectorAll('.artist-item');
+const noResults = document.getElementById('noResults');
+const pillBtns = document.querySelectorAll('.pill-btn');
+
+function filterArtists() {
+    const query = searchInput.value.toLowerCase().trim();
+    let visibleCount = 0;
+
+    artistItems.forEach(item => {
+        const name = item.getAttribute('data-name').toLowerCase();
+        const genre = item.getAttribute('data-genre').toLowerCase();
+        const fullContent = item.innerText.toLowerCase();
+
+        if (name.includes(query) || genre.includes(query) || fullContent.includes(query)) {
+            item.classList.remove('d-none');
+            visibleCount++;
+        } else {
+            item.classList.add('d-none');
+        }
+    });
+
+    if (visibleCount === 0) {
+        noResults.classList.remove('d-none');
+    } else {
+        noResults.classList.add('d-none');
+    }
+}
+
+function filterGenre(genre) {
+    pillBtns.forEach(btn => btn.classList.remove('active'));
+    
+    if (event && event.target) {
+        event.target.classList.add('active');
+    }
+
+    if (genre === 'all') {
+        searchInput.value = '';
+    } else {
+        searchInput.value = genre;
+    }
+    filterArtists();
+}
+
+searchInput.addEventListener('input', filterArtists);
+</script>
+
+</body>
+</html>

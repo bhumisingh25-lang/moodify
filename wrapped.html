@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎵 Moodify Wrapped 2026</title>
+
+<!-- Bootstrap 5 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- FontAwesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+:root {
+  --spotify-green: #1DB954;
+  --neon-pink: #ff007f;
+  --electric-purple: #7928ca;
+  --cyber-yellow: #ffea00;
+  --acid-orange: #ff5500;
+  --dark-bg: #08070d;
+}
+
+body {
+  background: var(--dark-bg);
+  color: #ffffff;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--dark-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: #252538;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--spotify-green);
+}
+
+/* Glassmorphism Wrapped Cards */
+.wrapped-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 28px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.wrapped-card:hover {
+  transform: translateY(-8px) scale(1.01);
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 0, 127, 0.2);
+}
+
+/* Wrapped Hero Banner */
+.wrapped-hero {
+  background: linear-gradient(135deg, #7928ca 0%, #ff007f 40%, #ff5500 70%, #1db954 100%);
+  background-size: 300% 300%;
+  animation: gradientShift 10s ease infinite;
+  border-radius: 32px;
+  padding: 4rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.wrapped-title {
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -2px;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  text-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+.text-gradient-pink {
+  background: linear-gradient(90deg, #ff007f, #ffea00);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-green {
+  background: linear-gradient(90deg, #1db954, #00f2fe);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-orange {
+  background: linear-gradient(90deg, #ff5500, #ffea00);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Audio Visualizer Canvas */
+#visualizer {
+  width: 100%;
+  height: 90px;
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Number Stat Highlights */
+.stat-number {
+  font-size: clamp(3rem, 5vw, 4.5rem);
+  font-weight: 900;
+  line-height: 1;
+}
+
+/* Buttons */
+.btn-wrapped {
+  background: #ffffff;
+  color: #000000;
+  font-weight: 800;
+  border-radius: 50px;
+  padding: 14px 32px;
+  border: none;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.btn-wrapped:hover {
+  background: var(--spotify-green);
+  color: #ffffff;
+  transform: scale(1.08);
+  box-shadow: 0 0 25px rgba(29, 185, 84, 0.8);
+}
+
+.btn-story {
+  background: var(--neon-pink);
+  color: #ffffff;
+  font-weight: 800;
+  border-radius: 50px;
+  padding: 14px 32px;
+  border: none;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+}
+
+.btn-story:hover {
+  background: #ffffff;
+  color: var(--neon-pink);
+  transform: scale(1.08);
+  box-shadow: 0 0 25px rgba(255, 0, 127, 0.8);
+}
+
+/* Custom Table Styling */
+.custom-table {
+  color: #ffffff;
+  vertical-align: middle;
+}
+
+.custom-table tbody tr {
+  transition: all 0.2s ease;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.custom-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: scale(1.005);
+}
+
+/* Artist Avatar Styling */
+.artist-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--neon-pink);
+  box-shadow: 0 0 20px rgba(255, 0, 127, 0.5);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.artist-card:hover .artist-avatar {
+  transform: scale(1.15) rotate(6deg);
+  border-color: var(--cyber-yellow);
+  box-shadow: 0 0 25px rgba(255, 234, 0, 0.8);
+}
+
+/* Arcade Tap Zone */
+.tap-zone {
+  height: 160px;
+  border: 3px dashed var(--cyber-yellow);
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.1s ease;
+  background: rgba(255, 234, 0, 0.03);
+}
+
+.tap-zone:active {
+  background: rgba(255, 234, 0, 0.25);
+  transform: scale(0.98);
+}
+
+hr.glow-divider {
+  border: none;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--neon-pink), var(--spotify-green), transparent);
+}
+
+/* --- WRAPPED STORIES MODAL OVERLAY --- */
+.story-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  z-index: 9999;
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.story-card-container {
+  width: 100%;
+  max-width: 420px;
+  height: 90vh;
+  max-height: 800px;
+  border-radius: 32px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 0 50px rgba(255, 255, 255, 0.15);
+}
+
+.story-progress-bar {
+  display: flex;
+  gap: 6px;
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  z-index: 10;
+}
+
+.progress-segment {
+  height: 4px;
+  flex-grow: 1;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: #ffffff;
+  transition: width 0.1s linear;
+}
+
+.story-close-btn {
+  position: absolute;
+  top: 28px;
+  right: 20px;
+  z-index: 20;
+  color: white;
+  background: rgba(0,0,0,0.4);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- SHAREABLE CARD GENERATOR --- */
+#shareCard {
+  background: linear-gradient(135deg, #12002b 0%, #4c004d 50%, #ff0055 100%);
+  border-radius: 28px;
+  border: 2px solid rgba(255,255,255,0.2);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+}
+
+.theme-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid white;
+  cursor: pointer;
+  display: inline-block;
+}
+</style>
+</head>
+
+<body class="py-4">
+
+<div class="container">
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg sticky-top navbar-dark bg-dark bg-opacity-75 backdrop-blur rounded-4 px-3 mb-4 border border-white border-opacity-10">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold fs-4" href="#">
+        <i class="fa-brands fa-spotify text-success me-2"></i>Moodify
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="menu">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="dashboard.html">Discover</a></li>
+        <li class="nav-item"><a class="nav-link active" href="artists.html">Artists</a></li>
+        <li class="nav-item"><a class="nav-link" href="playlist.html">Playlists</a></li>
+        <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+        <li class="nav-item"><a class="nav-link" href="wrapped.html">Moodify Wrapped</a></li>
+      </ul>
+    </div>
+    </div>
+  </nav>
+
+  <!-- WRAPPED HERO SECTION -->
+  <div class="wrapped-hero mb-5 text-center text-md-start">
+    <div class="row align-items-center position-relative z-1">
+      <div class="col-md-7">
+        <span class="badge bg-black text-warning fs-6 px-3 py-2 rounded-pill mb-3 border border-warning">
+          ✨ YOUR 2026 UNWRAPPED
+        </span>
+        <h1 class="wrapped-title">YOUR MUSIC YEAR IN REVIEW</h1>
+        <p class="fs-5 opacity-90 mb-4">
+          You spent <strong class="text-warning fs-4">48,290 minutes</strong> vibing this year. Let’s dive into your sonic personality, top tracks, dynamic charts, and arcade challenges!
+        </p>
+
+        <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-md-start">
+          <button class="btn btn-story shadow-lg" onclick="startStoryMode()">
+            <i class="fas fa-mobile-screen-button me-2"></i> Launch Story Mode
+          </button>
+          <button class="btn btn-wrapped shadow-lg" onclick="toggleAudio()">
+            <i class="fas fa-play me-2" id="playIcon"></i> Play Synth Vibe
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-5 mt-4 mt-md-0">
+        <div class="p-3 bg-black bg-opacity-60 rounded-4 border border-white border-opacity-10 shadow">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="text-white-50 small"><i class="fas fa-wave-square me-1 text-success"></i> Realtime Audio Synthesizer</span>
+            <span class="badge bg-danger rounded-pill px-2" id="audioStatus">OFFLINE</span>
+          </div>
+          <canvas id="visualizer"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUICK STAT HIGHLIGHTS -->
+  <div class="row g-4 mb-5">
+    <div class="col-md-4">
+      <div class="wrapped-card p-4 text-center h-100 position-relative overflow-hidden">
+        <p class="text-white-50 text-uppercase fw-bold mb-1">Top Listening Personality</p>
+        <h3 class="fw-bold text-gradient-pink display-6">"The Night Cruiser"</h3>
+        <span class="display-3 d-block my-2">🌌</span>
+        <p class="small text-white-50">82% of your streaming happened between 9 PM and 2 AM.</p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="wrapped-card p-4 text-center h-100">
+        <p class="text-white-50 text-uppercase fw-bold mb-1">Total Minutes Streamed</p>
+        <div class="stat-number text-gradient-green my-2" id="minuteCounter">0</div>
+        <p class="small text-white-50">Top <strong class="text-white">3%</strong> of global listeners this year!</p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="wrapped-card p-4 text-center h-100">
+        <p class="text-white-50 text-uppercase fw-bold mb-1">Top Audio Vibe</p>
+        <h3 class="fw-bold text-gradient-orange display-6">128 High BPM</h3>
+        <span class="display-3 d-block my-2">🔥</span>
+        <p class="small text-white-50">Energetic & Workout tracks dominated your queue.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="glow-divider my-5">
+
+  <!-- RECENTLY PLAYED TABLE WITH MOOD FILTERS -->
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+    <div>
+      <h2 class="fw-bold mb-0">🎧 Your Listening Log</h2>
+      <p class="text-white-50 mb-0">Filter tracks by your mood state</p>
+    </div>
+    <div class="btn-group bg-dark p-1 rounded-pill border border-white border-opacity-10">
+      <button class="btn btn-sm btn-outline-light rounded-pill border-0 px-3 active" onclick="filterMood('All', this)">All</button>
+      <button class="btn btn-sm btn-outline-success rounded-pill border-0 px-3" onclick="filterMood('Happy', this)">Happy</button>
+      <button class="btn btn-sm btn-outline-danger rounded-pill border-0 px-3" onclick="filterMood('Energetic', this)">Energetic</button>
+      <button class="btn btn-sm btn-outline-warning rounded-pill border-0 px-3" onclick="filterMood('Romantic', this)">Romantic</button>
+    </div>
+  </div>
+
+  <div class="table-responsive wrapped-card p-4 mb-5">
+    <table class="table custom-table mb-0">
+      <thead>
+        <tr class="text-white-50 border-bottom border-secondary">
+          <th>#</th>
+          <th>Track</th>
+          <th>Artist</th>
+          <th>Mood Tag</th>
+          <th>BPM</th>
+          <th>Played</th>
+        </tr>
+      </thead>
+      <tbody id="trackTableBody">
+        <!-- Injected via JS -->
+      </tbody>
+    </table>
+  </div>
+
+  <hr class="glow-divider my-5">
+
+  <!-- VISUAL ANALYTICS & AUDIO RADAR -->
+  <h2 class="fw-bold mb-4">📊 Wrapped Analytics</h2>
+  <div class="row g-4 mb-5">
+    <div class="col-md-6">
+      <div class="wrapped-card p-4 h-100">
+        <h4 class="fw-bold mb-3 text-gradient-green">Your Mood Breakdown</h4>
+        <canvas id="moodChart"></canvas>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="wrapped-card p-4 h-100">
+        <h4 class="fw-bold mb-3 text-gradient-pink">Audio DNA Feature Profile</h4>
+        <canvas id="featuresChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <hr class="glow-divider my-5">
+
+  <!-- TOP SONGS & TOP ARTISTS -->
+  <div class="row g-4 mb-5">
+    <!-- Top Songs -->
+    <div class="col-md-6">
+      <h2 class="fw-bold mb-4">👑 Top Tracks</h2>
+      
+      <div class="wrapped-card p-3 mb-3 d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center">
+          <span class="display-6 fw-bold me-3 text-warning">01</span>
+          <div>
+            <h5 class="mb-0 fw-bold">Shape of You</h5>
+            <small class="text-white-50">Ed Sheeran</small>
+          </div>
+        </div>
+        <span class="badge bg-success rounded-pill px-3 py-2">1.2M Plays</span>
+      </div>
+
+      <div class="wrapped-card p-3 mb-3 d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center">
+          <span class="display-6 fw-bold me-3 text-white-50">02</span>
+          <div>
+            <h5 class="mb-0 fw-bold">Starboy</h5>
+            <small class="text-white-50">The Weeknd</small>
+          </div>
+        </div>
+        <span class="badge bg-dark border border-secondary rounded-pill px-3 py-2">980K Plays</span>
+      </div>
+
+      <div class="wrapped-card p-3 d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center">
+          <span class="display-6 fw-bold me-3 text-white-50">03</span>
+          <div>
+            <h5 class="mb-0 fw-bold">Levitating</h5>
+            <small class="text-white-50">Dua Lipa</small>
+          </div>
+        </div>
+        <span class="badge bg-dark border border-secondary rounded-pill px-3 py-2">910K Plays</span>
+      </div>
+    </div>
+
+    <!-- Top Artists -->
+    <div class="col-md-6">
+      <h2 class="fw-bold mb-4">⭐ Top Artists</h2>
+      <div class="row g-3 text-center">
+        <div class="col-6 col-sm-3 artist-card">
+          <img src="https://picsum.photos/200?1" class="artist-avatar mb-2" alt="Artist">
+          <h6 class="mb-0 fw-bold">Taylor Swift</h6>
+        </div>
+        <div class="col-6 col-sm-3 artist-card">
+          <img src="https://picsum.photos/200?2" class="artist-avatar mb-2" alt="Artist">
+          <h6 class="mb-0 fw-bold">Ed Sheeran</h6>
+        </div>
+        <div class="col-6 col-sm-3 artist-card">
+          <img src="https://picsum.photos/200?3" class="artist-avatar mb-2" alt="Artist">
+          <h6 class="mb-0 fw-bold">The Weeknd</h6>
+        </div>
+        <div class="col-6 col-sm-3 artist-card">
+          <img src="https://picsum.photos/200?4" class="artist-avatar mb-2" alt="Artist">
+          <h6 class="mb-0 fw-bold">Dua Lipa</h6>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="glow-divider my-5">
+
+  <!-- SHAREABLE WRAPPED CARD GENERATOR -->
+  <div class="row align-items-center mb-5">
+    <div class="col-md-5 mb-4 mb-md-0">
+      <h2 class="fw-bold">📱 Share Your Vibe</h2>
+      <p class="text-white-50">Customize your official 2026 Wrapped summary card and flex your music personality with friends!</p>
+      
+      <div class="mb-3">
+        <label class="form-label text-white-50 small">Choose Color Aura Theme:</label>
+        <div class="d-flex gap-2">
+          <span class="theme-btn" style="background: linear-gradient(135deg, #12002b, #ff0055);" onclick="setCardTheme('purple')"></span>
+          <span class="theme-btn" style="background: linear-gradient(135deg, #003311, #1db954);" onclick="setCardTheme('green')"></span>
+          <span class="theme-btn" style="background: linear-gradient(135deg, #331100, #ff5500);" onclick="setCardTheme('orange')"></span>
+        </div>
+      </div>
+
+      <button class="btn btn-outline-light rounded-pill px-4" onclick="copyCardData()">
+        <i class="fas fa-share-nodes me-2"></i> Copy Summary
+      </button>
+    </div>
+
+    <div class="col-md-7">
+      <div id="shareCard" class="p-4 text-center position-relative">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <span class="fw-bold"><i class="fa-brands fa-spotify me-1"></i> Moodify Wrapped</span>
+          <span class="badge bg-white text-dark rounded-pill">2026</span>
+        </div>
+        <h3 class="fw-bold text-warning mb-1">"The Night Cruiser"</h3>
+        <p class="small text-white-50 mb-3">Top 3% Global Listener</p>
+
+        <div class="row g-2 bg-black bg-opacity-40 rounded-3 p-3 text-start small mb-3">
+          <div class="col-6">🎵 Top Track: <strong>Shape of You</strong></div>
+          <div class="col-6">👨‍🎤 Top Artist: <strong>Taylor Swift</strong></div>
+          <div class="col-6">⏱️ Minutes: <strong>48,290</strong></div>
+          <div class="col-6">⚡ Audio DNA: <strong>128 BPM</strong></div>
+        </div>
+
+        <p class="small text-white-50 mb-0">moodify.me/wrapped2026</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="glow-divider my-5">
+
+  <!-- MUSIC ARCADE / WRAPPED MINI GAMES -->
+  <h2 class="fw-bold mb-4">🕹️ Wrapped Arcade Challenge</h2>
+
+  <div class="row g-4 mb-5">
+    <!-- Game 1: Lyric Mood Guess -->
+    <div class="col-md-6">
+      <div class="wrapped-card p-4 h-100 text-center">
+        <span class="badge bg-danger mb-2">Challenge #1</span>
+        <h4 class="fw-bold">Guess the Lyric Mood</h4>
+        <div class="p-3 my-3 bg-black bg-opacity-50 rounded-3 border border-white border-opacity-10">
+          <p class="fst-italic fs-5 mb-0 text-warning" id="lyricText">"I got sunshine on a cloudy day..."</p>
+        </div>
+        <div class="d-flex justify-content-center gap-2 flex-wrap mb-3">
+          <button class="btn btn-outline-success rounded-pill px-3" onclick="checkLyric('Happy')">😊 Happy</button>
+          <button class="btn btn-outline-primary rounded-pill px-3" onclick="checkLyric('Sad')">😢 Sad</button>
+          <button class="btn btn-outline-danger rounded-pill px-3" onclick="checkLyric('Workout')">💪 Workout</button>
+        </div>
+        <h5 id="lyricResult" class="fw-bold mt-2"></h5>
+      </div>
+    </div>
+
+    <!-- Game 2: Beat Tapper -->
+    <div class="col-md-6">
+      <div class="wrapped-card p-4 h-100 text-center">
+        <span class="badge bg-warning text-dark mb-2">Challenge #2</span>
+        <h4 class="fw-bold">Tap-to-the-Beat BPM Counter</h4>
+        <p class="text-white-50 small">Tap the box below in rhythm to calculate BPM!</p>
+        
+        <div class="tap-zone mb-3" id="tapZone" onclick="tapBeat()">
+          <span class="fs-4 text-warning fw-bold" id="tapPrompt"><i class="fas fa-hand-pointer me-2"></i>TAP HERE TO BEAT</span>
+        </div>
+
+        <div class="d-flex justify-content-around align-items-center">
+          <div>
+            <span class="text-white-50 d-block">Estimated BPM:</span>
+            <span class="fs-2 fw-bold text-gradient-pink" id="bpmDisplay">0 BPM</span>
+          </div>
+          <button class="btn btn-sm btn-outline-light rounded-pill" onclick="resetBpm()">Reset</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- WRAPPED STORY MODE OVERLAY -->
+<div class="story-overlay" id="storyOverlay">
+  <button class="story-close-btn" onclick="closeStoryMode()"><i class="fas fa-times"></i></button>
+
+  <div class="story-card-container" id="storyContainer">
+    <div class="story-progress-bar">
+      <div class="progress-segment"><div class="progress-fill" id="fill0"></div></div>
+      <div class="progress-segment"><div class="progress-fill" id="fill1"></div></div>
+      <div class="progress-segment"><div class="progress-fill" id="fill2"></div></div>
+    </div>
+
+    <div class="text-center my-auto" id="storyContent">
+      <!-- Dynamic story slide content -->
+    </div>
+
+    <div class="d-flex justify-content-between w-100">
+      <button class="btn btn-sm btn-outline-light rounded-pill px-3" onclick="prevSlide()">Back</button>
+      <button class="btn btn-sm btn-light rounded-pill px-3" onclick="nextSlide()">Next</button>
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript Logic -->
+<script>
+// --- Minutes Stat Counter Animation ---
+let targetMinutes = 48290;
+let currentCount = 0;
+const counterElem = document.getElementById('minuteCounter');
+
+function animateCounter() {
+  const step = Math.ceil(targetMinutes / 60);
+  if (currentCount < targetMinutes) {
+    currentCount += step;
+    if (currentCount > targetMinutes) currentCount = targetMinutes;
+    counterElem.innerText = currentCount.toLocaleString();
+    setTimeout(animateCounter, 25);
+  }
+}
+animateCounter();
+
+// --- Data & Table Filtering ---
+const recentTracks = [
+  { id: 1, song: "Blinding Lights", artist: "The Weeknd", mood: "Happy", bpm: 171, time: "9:15 AM" },
+  { id: 2, song: "Perfect", artist: "Ed Sheeran", mood: "Romantic", bpm: 95, time: "10:30 AM" },
+  { id: 3, song: "Levitating", artist: "Dua Lipa", mood: "Energetic", bpm: 103, time: "Yesterday" },
+  { id: 4, song: "Someone Like You", artist: "Adele", mood: "Romantic", bpm: 67, time: "Yesterday" },
+  { id: 5, song: "Eye of the Tiger", artist: "Survivor", mood: "Energetic", bpm: 109, time: "2 days ago" }
+];
+
+function renderTable(tracks) {
+  const tbody = document.getElementById('trackTableBody');
+  tbody.innerHTML = tracks.map(t => `
+    <tr>
+      <td class="text-white-50">${t.id}</td>
+      <td class="fw-bold">${t.song}</td>
+      <td class="text-white-50">${t.artist}</td>
+      <td><span class="badge bg-dark border border-success text-success">${t.mood}</span></td>
+      <td>${t.bpm} BPM</td>
+      <td class="text-white-50">${t.time}</td>
+    </tr>
+  `).join('');
+}
+renderTable(recentTracks);
+
+function filterMood(mood, btn) {
+  document.querySelectorAll('.btn-group .btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (mood === 'All') renderTable(recentTracks);
+  else renderTable(recentTracks.filter(t => t.mood === mood));
+}
+
+// --- Dynamic Charts (Chart.js) ---
+const moodCtx = document.getElementById('moodChart').getContext('2d');
+new Chart(moodCtx, {
+  type: 'doughnut',
+  data: {
+    labels: ['Happy', 'Romantic', 'Relax', 'Workout', 'Party'],
+    datasets: [{
+      data: [35, 10, 20, 25, 10],
+      backgroundColor: ['#1DB954', '#00F2FE', '#FFEA00', '#FF007F', '#7928CA'],
+      borderWidth: 0
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { labels: { color: 'white' } } }
+  }
+});
+
+const featureCtx = document.getElementById('featuresChart').getContext('2d');
+new Chart(featureCtx, {
+  type: 'radar',
+  data: {
+    labels: ['Happiness', 'Energy', 'Danceability', 'Acousticness', 'Speechiness'],
+    datasets: [{
+      label: 'Audio Trait Level',
+      data: [85, 90, 75, 40, 35],
+      backgroundColor: 'rgba(255, 0, 127, 0.25)',
+      borderColor: '#ff007f',
+      pointBackgroundColor: '#ffea00'
+    }]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      r: {
+        angleLines: { color: 'rgba(255,255,255,0.15)' },
+        grid: { color: 'rgba(255,255,255,0.15)' },
+        pointLabels: { color: '#ffffff', font: { size: 12 } },
+        ticks: { display: false }
+      }
+    },
+    plugins: { legend: { labels: { color: 'white' } } }
+  }
+});
+
+// --- Audio Visualizer Synth Engine ---
+let audioCtx;
+let oscillator;
+let isPlaying = false;
+const canvas = document.getElementById('visualizer');
+const canvasCtx = canvas.getContext('2d');
+
+function toggleAudio() {
+  const icon = document.getElementById('playIcon');
+  const status = document.getElementById('audioStatus');
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+
+  if (isPlaying) {
+    oscillator.stop();
+    isPlaying = false;
+    icon.className = "fas fa-play me-2";
+    status.innerText = "OFFLINE";
+    status.className = "badge bg-danger rounded-pill px-2";
+  } else {
+    oscillator = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    
+    oscillator.type = 'sawtooth';
+    oscillator.frequency.setValueAtTime(261.63, audioCtx.currentTime);
+    gainNode.gain.setValueAtTime(0.04, audioCtx.currentTime);
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    
+    oscillator.start();
+    isPlaying = true;
+    icon.className = "fas fa-pause me-2";
+    status.innerText = "LIVE SYNTH";
+    status.className = "badge bg-success rounded-pill px-2";
+    drawVisualizer();
+  }
+}
+
+function drawVisualizer() {
+  if (!isPlaying) {
+    canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+    return;
+  }
+  requestAnimationFrame(drawVisualizer);
+
+  canvasCtx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+  canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+
+  const barWidth = (canvas.width / 20) - 2;
+  for (let i = 0; i < 20; i++) {
+    const barHeight = Math.random() * canvas.height * 0.85;
+    canvasCtx.fillStyle = i % 2 === 0 ? '#1DB954' : '#ff007f';
+    canvasCtx.fillRect(i * (barWidth + 2), canvas.height - barHeight, barWidth, barHeight);
+  }
+}
+
+// --- Arcade Games ---
+function checkLyric(answer) {
+  const res = document.getElementById("lyricResult");
+  if (answer === "Happy") {
+    res.innerHTML = "🎉 Spot on! Pure sunshine energy!";
+    res.style.color = "#1DB954";
+  } else {
+    res.innerHTML = "❌ Not quite! Try again.";
+    res.style.color = "#ff007f";
+  }
+}
+
+let tapTimes = [];
+function tapBeat() {
+  const now = performance.now();
+  tapTimes.push(now);
+
+  const prompt = document.getElementById('tapPrompt');
+  prompt.style.transform = "scale(1.1)";
+  setTimeout(() => prompt.style.transform = "scale(1)", 100);
+
+  if (tapTimes.length > 8) tapTimes.shift();
+
+  if (tapTimes.length > 1) {
+    const intervals = [];
+    for (let i = 1; i < tapTimes.length; i++) {
+      intervals.push(tapTimes[i] - tapTimes[i - 1]);
+    }
+    const avgInterval = intervals.reduce((a, b) => a + b) / intervals.length;
+    const bpm = Math.round(60000 / avgInterval);
+    document.getElementById('bpmDisplay').innerText = `${bpm} BPM`;
+  }
+}
+
+function resetBpm() {
+  tapTimes = [];
+  document.getElementById('bpmDisplay').innerText = "0 BPM";
+}
+
+// --- Story Mode Experience ---
+const slides = [
+  {
+    bg: "linear-gradient(135deg, #7928ca, #ff007f)",
+    content: `<span class="display-1">🌌</span><h2 class="fw-bold mt-3">You are "The Night Cruiser"</h2><p class="fs-5 mt-2">82% of your tracks were played late at night.</p>`
+  },
+  {
+    bg: "linear-gradient(135deg, #1db954, #00f2fe)",
+    content: `<span class="display-1">⏱️</span><h1 class="display-4 fw-bold mt-3">48,290</h1><p class="fs-4">Minutes Streamed</p><p class="small text-white-50">Top 3% listener worldwide!</p>`
+  },
+  {
+    bg: "linear-gradient(135deg, #ff5500, #ffea00)",
+    content: `<span class="display-1">👑</span><h3 class="fw-bold mt-3">Top Artist</h3><h1 class="display-4 fw-bold text-dark">Taylor Swift</h1><p class="fs-5 mt-2">You couldn't get enough!</p>`
+  }
+];
+
+let currentSlide = 0;
+let storyTimer;
+
+function startStoryMode() {
+  document.getElementById('storyOverlay').style.display = 'flex';
+  currentSlide = 0;
+  showSlide(currentSlide);
+}
+
+function closeStoryMode() {
+  document.getElementById('storyOverlay').style.display = 'none';
+  clearTimeout(storyTimer);
+}
+
+function showSlide(index) {
+  const container = document.getElementById('storyContainer');
+  const content = document.getElementById('storyContent');
+
+  container.style.background = slides[index].bg;
+  content.innerHTML = slides[index].content;
+
+  // Update progress bars
+  for (let i = 0; i < 3; i++) {
+    const fill = document.getElementById(`fill${i}`);
+    if (i < index) fill.style.width = '100%';
+    else if (i === index) fill.style.width = '100%';
+    else fill.style.width = '0%';
+  }
+}
+
+function nextSlide() {
+  if (currentSlide < slides.length - 1) {
+    currentSlide++;
+    showSlide(currentSlide);
+  } else {
+    closeStoryMode();
+  }
+}
+
+function prevSlide() {
+  if (currentSlide > 0) {
+    currentSlide--;
+    showSlide(currentSlide);
+  }
+}
+
+// --- Share Card Customizer ---
+function setCardTheme(theme) {
+  const card = document.getElementById('shareCard');
+  if (theme === 'purple') {
+    card.style.background = 'linear-gradient(135deg, #12002b 0%, #4c004d 50%, #ff0055 100%)';
+  } else if (theme === 'green') {
+    card.style.background = 'linear-gradient(135deg, #002208 0%, #005c21 50%, #1db954 100%)';
+  } else if (theme === 'orange') {
+    card.style.background = 'linear-gradient(135deg, #331100 0%, #802b00 50%, #ff5500 100%)';
+  }
+}
+
+function copyCardData() {
+  navigator.clipboard.writeText("🎵 My 2026 Moodify Wrapped: 'The Night Cruiser' with 48,290 minutes streamed! Check yours at moodify.me/wrapped2026");
+  alert("Summary copied to clipboard!");
+}
+</script>
+
+</body>
+</html>
